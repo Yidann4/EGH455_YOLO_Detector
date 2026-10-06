@@ -7,6 +7,8 @@
 
 - pixi run pytest -q tests/<file_name>
 
+- pixi run pytests -q -rP tests/<file_name> -- for logging prints to terminal
+
 ### PyTest Implementation
 
 - classes must begin with Test
