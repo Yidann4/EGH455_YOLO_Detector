@@ -17,7 +17,6 @@ class TestExample:
         assert reader1 is reader2, "YamlReader is not a singleton"
         
     def test_print_names(self):
-
         names = YamlReader().get_names()
         print(f"Names: {names}")
         assert names == ['closedValve', 'gauge', 'openValve'], "Class labels do not match expected values"
