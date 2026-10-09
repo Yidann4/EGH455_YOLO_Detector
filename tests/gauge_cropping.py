@@ -51,13 +51,15 @@ class TestGaugeCropping:
             pytest.skip(f"No {class_type} samples found in {MAX_ATTEMPTS} draws")
 
         for raw_image, ground_labels in samples:
-            prediction = predictor.predict(raw_image)
-            predicted_image = predictor.annotate_image(raw_image, prediction)
 
-            ground_classes = predictor.extract_only_labels(ground_labels)
+            ## ONE RUN OF GAUGE DETECTION AND CROPPING
+            prediction = predictor.predict(raw_image) # [("gauge", (x1, y1, x2, y2)), ... ]
+            predicted_image = predictor.annotate_image(raw_image, prediction) # predicted_image =Image with bounding box
+
+            ground_classes = predictor.extract_only_labels(ground_labels) # just transforms [("gauge", (x1, y1, x2, y2)), ("openValve", (x1, y1, x2, y2))] -> ["gauge", "openValve"]
             predicted_classes = predictor.extract_only_labels(prediction)
 
-            gauge_crop_image = predictor.get_latest_gauge_crop()
+            gauge_crop_image = predictor.get_latest_gauge_crop() # a pure image of just the gauge face (cropped based off of the detection)
             
             if gauge_crop_image is not None:
                 
