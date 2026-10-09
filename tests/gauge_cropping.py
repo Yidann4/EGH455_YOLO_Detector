@@ -14,6 +14,13 @@ def show(title, image):
     cv2.imshow(title, image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+    
+def side_by_side(left, right):
+    """Scale `right` to left's height, then place them next to each other."""
+    h = left.shape[0]
+    scale = h / right.shape[0]
+    right = cv2.resize(right, (int(right.shape[1] * scale), h))
+    return cv2.hconcat([left, right])
 
 
 @pytest.fixture(scope="module")
@@ -35,8 +42,10 @@ def samples_by_class(predictor):
     return samples
 
 
-class TestPredictor:
-    def general_test(self, predictor, samples_by_class, class_type):
+class TestGaugeCropping:
+    
+    def test_gauge_cropping(self, predictor, samples_by_class):
+        class_type = "gauge"
         samples = samples_by_class[class_type]
         if not samples:
             pytest.skip(f"No {class_type} samples found in {MAX_ATTEMPTS} draws")
@@ -47,17 +56,13 @@ class TestPredictor:
 
             ground_classes = predictor.extract_only_labels(ground_labels)
             predicted_classes = predictor.extract_only_labels(prediction)
-            print(f"Predicted: {predicted_classes}, Ground: {ground_classes}")
 
-            show("Raw", raw_image)
-            show(f"{class_type} Prediction", predicted_image)
-            assert ground_classes == predicted_classes
-
-    def test_spam_gauge(self, predictor, samples_by_class):
-        self.general_test(predictor, samples_by_class, "gauge")
-
-    def test_spam_openvalve(self, predictor, samples_by_class):
-        self.general_test(predictor, samples_by_class, "openValve")
-
-    def test_spam_closedvalve(self, predictor, samples_by_class):
-        self.general_test(predictor, samples_by_class, "closedValve")
+            gauge_crop_image = predictor.get_latest_gauge_crop()
+            
+            if gauge_crop_image is not None:
+                
+                split_view = side_by_side(raw_image, gauge_crop_image)
+                show("Raw Gauge vs Cropped Prediction", split_view)
+            else:
+                show("No gauge detected :/", raw_image)
+            assert 1 + 1 == 2

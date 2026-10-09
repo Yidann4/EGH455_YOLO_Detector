@@ -74,8 +74,10 @@ class Annotater(YamlReader):
         
         return raw_image, annotated_image, labels
 
-       
-                
+    def extract_only_labels(self, labels):
+        # input: labels = [('openValve', (0.1, 0.3, 0.5, 0.1)), ('openValve', (0.1, 0.3, 0.5, 0.1))]
+        # output: ['openValve', 'openValve'] 
+        return [name for name, _ in labels]
             
         
         
