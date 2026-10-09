@@ -9,6 +9,8 @@ from annotater import Annotater
 import cv2
 from datetime import datetime, timedelta
 
+def initialise_predictor():
+    return Predictor("models/50_epoch_best.pt")
 
 class Predictor(Annotater):
     """Predictor class for YOLO object detection to find gauges and valves in images."""

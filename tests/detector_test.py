@@ -3,7 +3,7 @@
 import cv2
 import pytest
 
-from src.predict import Predictor
+from src.predict import initialise_predictor
 
 CLASSES = ("gauge", "openValve", "closedValve")
 MAX_COUNT_PER_TYPE = 10
@@ -18,7 +18,7 @@ def show(title, image):
 
 @pytest.fixture(scope="module")
 def predictor():
-    return Predictor("models/50_epoch_best.pt")
+    return initialise_predictor()
 
 
 @pytest.fixture(scope="module")

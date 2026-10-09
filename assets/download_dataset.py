@@ -14,7 +14,6 @@ else:
     rf = Roboflow(api_key="wVDEtKF69fLiZfjLLC3n")
     project = rf.workspace("bio-aidan-gmail-com").project("v2_egh455")
     version = project.version(3)
-    dataset = version.download("yolo26")
-    DATA_YAML = f"{dataset.location}/data.yaml"
+    dataset = version.download("yolo26", location=f"{local_dataset_path.parent}")
 
 
