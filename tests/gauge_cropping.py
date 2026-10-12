@@ -35,7 +35,7 @@ def samples_by_class(predictor):
     for _ in range(MAX_ATTEMPTS):
         if all(len(s) >= MAX_COUNT_PER_TYPE for s in samples.values()):
             break
-        raw_image, _, ground_labels = predictor.get_test_sample()
+        raw_image, _, ground_labels = predictor.get_test_sample(12)
         for name in {n for n, _ in ground_labels} & samples.keys():
             if len(samples[name]) < MAX_COUNT_PER_TYPE:
                 samples[name].append((raw_image, ground_labels))
